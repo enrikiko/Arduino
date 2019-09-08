@@ -8,12 +8,12 @@
 //#include <ArduinoJson.h>
 
 const char *ssid1 = "Cuarto2.4G";
-const char *password1 = "Lunohas13steps";
-const char *ssid2 = "<ssid2>";
-const char *password2 = "<password2>";
-String deviceName = "Device-USB2";
+const char *password1 = "Lunohas13stepss";
+const char *ssid2 = "WifiSalon";
+const char *password2 = "lunohas13steps";
+String deviceName = "Device-USB3";
 int port = 80;
-IPAddress ipDevice(192, 168, 1, 101);
+IPAddress ipDevice(192, 168, 1, 102);
 IPAddress dns(80, 58, 61, 250);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
@@ -30,13 +30,15 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(ssid1, password1);
   WiFiMulti.addAP(ssid2, password2);
-  WiFi.config(ipDevice, dns, gateway, subnet);
+  //WiFi.config(ipDevice, dns, gateway, subnet);
   WiFi.begin();
 
   while (WiFiMulti.run() != WL_CONNECTED) {
     Serial.print(".");
     delay(1000);
   }
+
+  digitalWrite(LED_BUILTIN, LOW); 
 
   String ip = WiFi.localIP().toString();
   Serial.println("");
@@ -46,7 +48,7 @@ void setup() {
   Serial.println(ip);
 
   char pins[9] = {16,5,4,0,2,14,12,13,15};
-  Serial.println(sizeof(pins));
+  //Serial.println(sizeof(pins));
 
   for (int i = 0; i < sizeof(pins); i++){
     Serial.println(pins[i]);
@@ -103,6 +105,7 @@ void setIp(String ip, int pin){
       if (http.begin(client, "http://192.168.1.50:8000/new/"+deviceName+"-"+pin+"/true/"+ip+":"+port)) {
         Serial.print("[HTTP] GET CODE: ");
         int httpCode = http.GET();
+        Serial.println(httpCode);
         if (httpCode > 0) {
           Serial.println(httpCode);
           if (httpCode == 200 ) {
