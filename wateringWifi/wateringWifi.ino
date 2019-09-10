@@ -29,6 +29,9 @@ void setup() {
 
   Serial.begin(115200);
 
+
+  digitalWrite(LED_BUILTIN, HIGH);
+
   WiFi.mode(WIFI_STA);
   WiFiMulti.addAP(ssid1, password1);
   WiFiMulti.addAP(ssid2, password2);
@@ -40,7 +43,6 @@ void setup() {
     delay(1000);
   }
 
-  digitalWrite(LED_BUILTIN, LOW); 
 
   String ip = WiFi.localIP().toString();
   Serial.println("");
@@ -60,7 +62,7 @@ void setup() {
     Serial.println("MDNS responder started");
   }
 
-  digitalWrite(2, true);
+  digitalWrite(LED_BUILTIN, LOW);
   server.on("/"+deviceName+"-5/status/true", handleRoot5true);
   server.on("/"+deviceName+"-5/status/false", handleRoot5false);
   server.onNotFound(handleNotFound);
@@ -71,7 +73,6 @@ void setup() {
 void loop() {
 
   server.handleClient();
-  //MDNS.update();
 
 }
 
