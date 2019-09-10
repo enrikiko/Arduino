@@ -10,11 +10,13 @@
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+int port = 80;
+
 float h;
 float t;
 
 const char *ssid1 = "Cuarto2.4G";
-const char *password1 = "Lunohas13stepss";
+const char *password1 = "Lunohas13steps";
 const char *ssid2 = "WifiSalon";
 const char *password2 = "lunohas13steps";
 
@@ -58,8 +60,10 @@ void setup() {
 }
 
 void loop() {
+  digitalWrite(LED_BUILTIN, LOW);
   getWeatherInfo();
   sendInfo();
+  digitalWrite(LED_BUILTIN, HIGH);
   delay(3000);
   certain=true;
 }
@@ -76,5 +80,9 @@ void sendInfo(){
  Serial.print(t);
  WiFiClient client;
  HTTPClient http;
- http.begin(client, "http://192.168.1.50:8000/set/"+string(t)+"/"+string(h))
+ if (http.begin(client, "http://192.168.1.50:8000/set/"+String(t)+"/"+String(h))){
+  int httpCode = http.GET();
+  if (httpCode > 0) {
+     Serial.println("HTTP request sent");};
+  }
  }
